@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+# Process completed with exit code 1 발생으로 인해 추가한 코드
+from selenium.webdriver.chrome.options import Options
 # import time (8/24 pytest 실습하면서 주석처리)
 
 # 8/23일 진행한 것
@@ -26,7 +28,11 @@ driver.quit()
 @pytest.fixture
 def driver():
     service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
+    options = Options()
+    options.add_argument("--headless") # GUI 없이 실행하기 위해
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(service=service, options=options)
     driver.implicitly_wait(5)
     yield driver
     driver.quit()
