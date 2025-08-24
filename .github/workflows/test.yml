@@ -27,3 +27,12 @@ jobs:
 
     - name : Run Tests
       run : pytest -v --tiemout=60 --maxfail=1 --disable-warnings -q     
+
+    - name : Run Tests and Generate Report
+      run : pytest --html=report.html --self-contained-html
+
+    - name : Upload Test Report
+      uses : actions/upload-artifact@v3
+      with:
+        name : pytest-report
+        path : report.html
