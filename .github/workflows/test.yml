@@ -10,6 +10,7 @@ on :
 jobs:
   test:
     runs-on : ubuntu-latest # GitHub Actions 실행 환경(Linux)
+    timeout-minutes: 10 # 최대 10분까지만 실행
 
     steps:
     - name : Checkout code
@@ -22,7 +23,7 @@ jobs:
 
     - name : Install dependencies
       run : |
-        pip install pytest selenium webdriver-manager
+        pip install -r requirements.txt
 
     - name : Run Tests
-      run : pytest -v        
+      run : pytest -v --tiemout=60 --maxfail=1 --disable-warnings -q     
