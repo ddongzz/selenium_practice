@@ -1,9 +1,12 @@
+import pytest 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
-import time
+# import time (8/24 pytest 실습하면서 주석처리)
 
+# 8/23일 진행한 것
+'''
 # Chrome 드라이버 자동 설치 및 실행
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service)
@@ -18,3 +21,19 @@ search_box.submit()
 time.sleep(3)
 print("테스트 완료")
 driver.quit()
+'''
+
+@pytest.fixture
+def driver():
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service)
+    driver.implicitly_wait(5)
+    yield driver
+    driver.quit()
+
+def test_google_search(driver):
+    driver.get("https://www.google.com")
+    search_box = driver.find_element(By.NAME, "q")
+    search_box.send_keys("Selenium")
+    search_box.submit()
+    assert "Selenium" in driver.title
