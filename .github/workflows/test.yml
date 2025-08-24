@@ -26,7 +26,7 @@ jobs:
         pip install -r requirements.txt
 
     - name : Run Tests
-      run : pytest -v --tiemout=60 --maxfail=1 --disable-warnings -q     
+      run : pytest -v --timeout=60 --maxfail=1 --disable-warnings -q     
 
     - name : Run Tests and Generate Report
       run : pytest --html=report.html --self-contained-html
