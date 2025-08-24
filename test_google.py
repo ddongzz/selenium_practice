@@ -31,9 +31,20 @@ def driver():
     yield driver
     driver.quit()
 
-def test_google_search(driver):
+def test_google_search_selenium(driver):
     driver.get("https://www.google.com")
     search_box = driver.find_element(By.NAME, "q")
     search_box.send_keys("Selenium")
     search_box.submit()
     assert "Selenium" in driver.title
+
+def test_google_search_python(driver):
+    driver.get("https://www.google.com")
+    search_box = driver.find_element(By.NAME, "q")
+    search_box.send_keys("Python pytest")
+    search_box.submit()
+    assert "Python" in driver.title or "pytest" in driver.title
+
+def test_google_search_homepage(driver):
+    driver.get("https://www.google.com")
+    assert "Google" in driver.title
