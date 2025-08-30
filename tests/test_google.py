@@ -22,5 +22,5 @@ def test_google_search_pytyon(driver: WebDriver):
 def test_google_search_autotesting(driver: WebDriver):
     google = GooglePage(driver)
     google.open()
-    google.search("자동화 테스트")
-    assert google.title_contains("자동화") or google.title_contains("테스트")
+    google.search("qa")
+    assert google.title_contains("qa") 
