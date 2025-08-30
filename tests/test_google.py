@@ -1,7 +1,6 @@
 # assert를 사용하는 이유는 구문 간결 및 에러 내용 및 CI/CD에 필요하다.
 from selenium.webdriver.chrome.webdriver import WebDriver
 from pages.google_page import GooglePage
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -19,10 +18,9 @@ def test_google_search_pytyon(driver: WebDriver):
     google.search("Pytyon pytest")
     assert google.title_contains("Python") or google.title_contains("pytest")
 
-def test_google_search_shows_results(driver):
-    driver.get("https://www.google.com")
-
-    # 검색창에 "Python" 입력 후 검색
-    search_box = driver.find_element(By.NAME, "q")
-    search_box.send_keys("Python")
-    search_box.submit()
+# f"실패: 현재 title은 '{driver.title}' 입니다."
+def test_google_search_autotesting(driver: WebDriver):
+    google = GooglePage(driver)
+    google.open()
+    google.search("자동화 테스트")
+    assert google.title_contains("자동화") or google.title_contains("테스트")
