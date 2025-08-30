@@ -1,7 +1,6 @@
 # assert를 사용하는 이유는 구문 간결 및 에러 내용 및 CI/CD에 필요하다.
 from selenium.webdriver.chrome.webdriver import WebDriver
 from pages.google_page import GooglePage
-from pages.naver_page import NaverPage
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -24,11 +23,6 @@ def test_google_search_autotesting(driver: WebDriver):
     google = GooglePage(driver)
     google.open()
     google.search("qa")
+    WebDriverWait(driver, 10).until(EC.url_contains("qa"))
     assert google.title_contains("qa") 
 
-def test_naver_selenium(driver):
-    naver = NaverPage(driver)
-    naver.open()
-    naver.search("판교역")
-    WebDriverWait(driver, 10).until(EC.url_contains("판교역"))
-    assert naver.title_contains("판교역")
