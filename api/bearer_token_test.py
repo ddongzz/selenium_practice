@@ -13,7 +13,7 @@ if response_fail.status_code == 401:
 
 print("=== 2. 토큰 챙겨서 당당하게 입장 (Positive Test) ===")
 # 가짜 JWT 토큰을 하나 발급받았다고 칩시다.
-my_token = "eyJhbGciOiJIUzI1NiIsIn.진짜_복잡한_토큰_문자열.1234567890"
+my_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_token_payload.1234567890"
 
 # 여기가 핵심! 헤더(headers) 딕셔너리에 Bearer 양식으로 세팅합니다.
 # 주의: Bearer 띄우고 토큰값입니다!
