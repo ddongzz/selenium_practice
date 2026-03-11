@@ -1,3 +1,4 @@
+import pytest
 import requests
 
 #실무에서 환경 변수(Environment)처럼 쓰는 기본 주소
@@ -77,3 +78,25 @@ def test_get_my_info_with_token():
     assert me_response.json()["username"] == "emilys"
 
     print("\n[자동화테스트 통과] 카드키(토큰) 인증 성공 에밀리 정보 확인")
+
+# 아래 배열에 있는 데이터 개수 만큼 이 테스트를 반복 실행해라
+@pytest.mark.parametrize("test_id, req_username, req_password, expected_status", [
+                         ("TC-04: 비밀번호 틀림", "emilys", "wrongpass", 400),
+                         ("TC-05: 존재하지 않는 유저", "ghost_user", "emilyspass", 400),
+                         ("TC-06: 비밀번호 빈칸", "emilys", "", 400)
+])
+
+def test_login_multiple_failures(test_id, req_username, req_password, expected_status):
+    """여러 가지 로그인 실패 상황(Edge Case)을 하나의 코드로 검증한다."""
+
+    url = f"{BASE_URL}/auth/login"
+    payload = {
+        "username" : req_username,
+        "password" : req_password
+    }
+
+    response = requests.post(url, json=payload)
+
+    assert response.status_code == expected_status
+
+    print(f"\n[{test_id}] 통과 여러개의 에러 방어 작동" )
