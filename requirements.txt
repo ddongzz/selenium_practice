@@ -3,3 +3,4 @@ selenium
 webdriver-manager
 pytest-timeout
 pytest-html
+requests

@@ -3,9 +3,9 @@ name : Python Selenium Tests
 # 언제 실행할지 설정하는 것
 on : 
    push :
-     branches : [master]
+     branches : ["master", "main"]
    pull_request:
-     branches : [master]  
+     branches : ["master", "main"]  
 
 jobs:
   test:
@@ -23,16 +23,15 @@ jobs:
 
     - name : Install dependencies
       run : |
-        pip install -r requirements.txt
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt]; then pip install -r requirements.txt; fi
+        pip install pytest requests allure-pytest pytest-html
 
-    - name : Run Tests
-      run : pytest -v --timeout=60 --maxfail=1 --disable-warnings -q     
+    - name : Run Tests and Collect Allure Data
+      run : pytest -v --maxfail=1 --disable-warnings -q --alluredir=allure-results     
 
-    - name : Run Tests and Generate Report
-      run : pytest --html=report.html --self-contained-html
-
-    - name : Upload Test Report
+    - name : Upload Allure Results (Artifact)
       uses : actions/upload-artifact@v4
       with:
-        name : pytest-report
-        path : report.html
+        name : allure-results
+        path : allure-results
