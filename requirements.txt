@@ -5,3 +5,4 @@ pytest-timeout
 pytest-html
 requests
 allure-pytest
+pymysql
