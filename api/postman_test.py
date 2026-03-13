@@ -115,6 +115,11 @@ def test_verify_user_in_local_db():
 
     try:
         with connection.cursor() as cursor:
+            # github에서 데이터베이스가 없다고 나와서 추가함
+            cursor.execute("CREATE TABLE IF NOT EXISTS users (id INT, email VARCHAR(50), status VARCHAR(10))")
+            cursor.execute("TRUNCATE TABLE users") # 혹시 모름 더미 데이터 청소
+            cursor.execute("INSERT INTO users VALUES (1, 'test@example.com', 'ACTIVE')")
+            connection.commit()
             # 2. SQL 쿼리 장착
             sql = "SELECT * FROM users WHERE email = 'test@example.com'"
             cursor.execute(sql)
