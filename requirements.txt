@@ -4,3 +4,4 @@ webdriver-manager
 pytest-timeout
 pytest-html
 requests
+allure-pytest
