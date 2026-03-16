@@ -1,0 +1,8 @@
+
+[UI] 가상의 서비스(JSONPlaceholder)에 접속합니다...
+[UI] 웹사이트 정상 로드 및 타이틀 확인 완료
+[API] 백엔드 서버에 회원 정보를 요청합니다.
+[API] 통ㅇ신 성공! 가져온 이메일: Shanna@melissa.tv
+[DB] 해당 이메일이 DB에 정상 적재되었는지 검증
+[DB] 적재 확인 완료 최종 확인 이메일: Shanna@melissa.tv
+e2e 테스트 완료
