@@ -1,8 +1,13 @@
 import pytest
+import pymysql
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+
+# --------------------------------------------------------------------------
+# 웹 브라우저 장비
+# --------------------------------------------------------------------------
 
 @pytest.fixture
 def driver():
@@ -17,3 +22,29 @@ def driver():
     driver.implicitly_wait(5)
     yield driver
     driver.quit()
+
+# --------------------------------------------------------------------------
+# 데이터베이스 장비
+# --------------------------------------------------------------------------
+
+@pytest.fixture(scope="function")
+def db_connection():
+    connection = pymysql.connect(
+        host='127.0.0.1',
+        user='root',
+        password='1111',
+        db='qa_test',
+        charset='utf8mb4',
+        cursorclass=pymysql.cursors.DictCursor
+    )
+
+    with connection.cursor() as cursor:
+        # 가짜 데이터 넣기
+        cursor.execute("CREATE TABLE IF NOT EXISTS users (id INT, email VARCHAR(50), status VARCHAR(10))")
+        cursor.execute("TRUNCATE TABLE users")
+        cursor.execute("INSERT INTO users VALUES(1, 'test@example.com', 'ACTIVE')")
+        connection.commit()
+
+    yield connection 
+
+    connection.close()

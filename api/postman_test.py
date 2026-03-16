@@ -102,37 +102,19 @@ def test_login_multiple_failures(test_id, req_username, req_password, expected_s
 
     print(f"\n[{test_id}] 통과 여러개의 에러 방어 작동" )
 
-def test_verify_user_in_local_db():
-    # 1. DB 접속 정보 세팅 (실무에서는 이 정보를 환경변수나 보안 파일에 숨긴다.)
-    connection = pymysql.connect(
-        host='127.0.0.1', # 또는 AWS 주소
-        user='root',
-        password='1111',
-        db='qa_test',
-        charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor
-    )
-
-    try:
-        with connection.cursor() as cursor:
-            # github에서 데이터베이스가 없다고 나와서 추가함
-            cursor.execute("CREATE TABLE IF NOT EXISTS users (id INT, email VARCHAR(50), status VARCHAR(10))")
-            cursor.execute("TRUNCATE TABLE users") # 혹시 모름 더미 데이터 청소
-            cursor.execute("INSERT INTO users VALUES (1, 'test@example.com', 'ACTIVE')")
-            connection.commit()
-            # 2. SQL 쿼리 장착
-            sql = "SELECT * FROM users WHERE email = 'test@example.com'"
-            cursor.execute(sql)
-
-            # 3. 쿼리 결과 가져오기
-            result = cursor.fetchone()
-
-            # 4 검증 assert
-            assert result is not None, "DB에 데이터가 없습니다."
-            assert result['status'] == 'ACTIVE', "계정 상태가 ACTIVE가 아닙니다."
-
-            print(f"DB 검증 성공: {result}")
+def test_verify_user_in_local_db(db_connection):
     
-    finally:
-        # 5. 작업이 끝나면 무조건 문을 닫아야함
-        connection.close()
+    # 데이터베이스 연결 
+    with db_connection.cursor() as cursor:
+        sql = "SELECT * FROM users WHERE email = 'test@example.com'"
+        cursor.execute(sql)
+
+        result = cursor.fetchone()
+        
+        # 검증에 대한 내용
+        assert result is not None, "데이터베이스를 못찾았어요"
+        assert result['status'] == 'ACTIVE'
+
+        print("\n 코드 다이어트 성공")
+
+   
