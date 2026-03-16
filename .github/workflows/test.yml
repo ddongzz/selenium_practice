@@ -38,7 +38,31 @@ jobs:
         pip install -r requirements.txt
 
     - name : Run Tests and Collect Allure Data
-      run : pytest --maxfail=1 --disable-warnings --alluredir=allure-results     
+      run : pytest --maxfail=1 --disable-warnings --alluredir=allure-results   
+    
+    # 테스트 실행
+    - name : Run E2E Tests with Allure
+      # if : always()를 넣으면 앞의 테스트가 실패해도 리포트는 무조건 뽑힌다. 
+      run : pytest api/e2e_test.py -s --alluredir=allure-results
+      continue-on-error : true
+
+    # Allure 결과물을 HTML 웹페이지 형태로 만들기
+    - name : Generate Allure Report
+      uses : simple-elf/allure-report-action@master
+      if : always()
+      with :
+        allure_results : allure-results
+        allure_history : allure-history
+        keep_reports : 20
+
+    # 만든 웹페이지를 GItHub Pages 브랜치(gh-pages)로 올리기
+    - name : Deploy Allure Report to GitHub Pages
+      uses : peaceiris/actions-gh-pages@v3
+      if : always()
+      with:
+        github_token : ${{ secrets.GITHUB_TOKEN }}
+        publish_branch : gh-pages
+        publish_dir : allure-history
 
     - name : Upload Allure Results (Artifact)
       uses : actions/upload-artifact@v4
