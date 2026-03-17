@@ -1,0 +1,4 @@
+
+[UI] 네거티브 테스트 타켓 : ID : 'standard_user', PW : 'wrong_pw_123'
+[UI] 실제 발생한 에러 문구 : Epic sadface: Username and password do not match any user in this service
+예외처리 방어 로직 통과
