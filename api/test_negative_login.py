@@ -1,5 +1,6 @@
 import pytest
 from selenium.webdriver.common.by import By
+from pages.login_page import LoginPage
 
 # 구조 ("아이디", "비밀번호", "에러메시지")
 @pytest.mark.parametrize("username, password, expected_error_msg", [
@@ -14,23 +15,14 @@ def test_saucedemo_login_negative(driver, username, password, expected_error_msg
     # 매 테스트마다 찌꺼기가 남지 않게 새 페이지로 접속(초기화)
     driver.get("https://www.saucedemo.com/")
 
-    # ID 입력 (빈 값일 경우 에러 방지를 위해 clear를 사용)
-    id_field = driver.find_element(By.ID, "user-name")
-    id_field.clear()
-    if username:
-        id_field.send_keys(username)
+    # 로그인 페이지에서 객체를 꺼내오기
+    login_page = LoginPage(driver)
 
-    # 비밀번호 입력
-    pw_field = driver.find_element(By.ID, "password")
-    if password:
-        pw_field.send_keys(password)
+    # 아이디와 비밀번호를 해당 객체의 함수에 전달
+    login_page.login(username, password)
 
-    # 로그인 버튼 클릭
-    driver.find_element(By.ID, "login-button").click()
-
-    # 에러 메시지 창이 떴는지 확인하기
-    error_element = driver.find_element(By.CSS_SELECTOR, "[data-test='error']")
-    actual_error_msg = error_element.text
+    # 에러 메시지 객체에서 꺼내오기
+    actual_error_msg = login_page.get_error_message()
 
     print(f"[UI] 실제 발생한 에러 문구 : {actual_error_msg}")
 
