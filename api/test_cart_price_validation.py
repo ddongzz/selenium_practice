@@ -1,36 +1,32 @@
 import pytest
-from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.by import By
+from pages.login_page import LoginPage
+from pages.inventory_page import InventoryPage
+from pages.cart_page import CartPage
+from pages.checkout_page import CheckoutPage
 
 def test_saucedemo_price_validation(driver, db_connection):
     print("\n[UI] 사이트 로그인")
     driver.get("https://www.saucedemo.com/")
-    driver.find_element(By.ID, "user-name").send_keys("standard_user")
-    driver.find_element(By.ID, "password").send_keys("secret_sauce")
-    driver.find_element(By.ID, "login-button").click()
+    LoginPage(driver).login('standard_user', 'secret_sauce')
 
     print("[UI] 백팩($29.99)과 자전거 전조등($9.99), 2개를 장바구니에 담기!")
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-bike-light").click()
+    inventory_page = InventoryPage(driver)
+    inventory_page.add_items_to_cart()
+    inventory_page.go_to_cart()
 
     print("[UI] 장바구니에서 결제 정보 입력창 이동")
-    driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-    driver.find_element(By.ID, "checkout").click()
+    CartPage(driver).click_checkout()
 
-    driver.find_element(By.ID, "first-name").send_keys("Dongchan")
-    driver.find_element(By.ID, "last-name").send_keys("Lee")
-    driver.find_element(By.ID, "postal-code").send_keys("13529")
-    driver.find_element(By.ID, "continue").click()
+    checkout_page = CheckoutPage(driver)
+    checkout_page.enter_checkout_info('Dongchan', 'Lee', '13529')
 
-    item_prices = driver.find_elements(By.CLASS_NAME, "inventory_item_price")
-    item_total_calc = sum([float(price.text.replace("$", "")) for price in item_prices])
+    item_total = checkout_page.get_item_total()
+    tax = checkout_page.get_tax()
+    total_value = checkout_page.get_total()
 
-    tax_text = driver.find_element(By.CLASS_NAME, "summary_tax_label").text
-    tax_value = float(tax_text.replace("Tax: $", ""))
 
-    total_text = driver.find_element(By.CLASS_NAME, "summary_total_label").text
-    total_value = float(total_text.replace("Total: $", ""))
-
-    print(f"계산 로그 > 아이템 합계 : {item_total_calc} / 세금 : {tax_value} / 화면에서 총 결제액 : {total_value}")
+    print(f"계산 로그 > 아이템 합계 : {item_total} / 세금 : {tax} / 화면에서 총 결제액 : {total_value}")
 
     # 데이터 검증
     print("[DB] 백엔드 DB에 최종 금액이 정확히 들어갔는지 체크")
