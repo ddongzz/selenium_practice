@@ -6,9 +6,11 @@ class CheckoutPage:
     POSTAL_CODE = (By.ID, "postal-code")
     CONTINUE_BTN = (By.ID, "continue")
 
-    ITEM_PRICES = (By.CLASS_NAME, "iventory_item_price")
+    ITEM_PRICES = (By.CLASS_NAME, "inventory_item_price")
     TAX_LABEL = (By.CLASS_NAME, "summary_tax_label")
     TOTAL_LABEL = (By.CLASS_NAME, "summary_total_label")
+    FINISH_BTN = (By.ID, "finish")
+    COMPLETE_HEADER = (By.CLASS_NAME, "complete-header")
 
     def __init__(self, driver):
         self.driver = driver
@@ -28,3 +30,11 @@ class CheckoutPage:
     
     def get_total(self):
         return float(self.driver.find_element(*self.TOTAL_LABEL).text.replace("Total: $", ""))
+    
+    def finish_click(self):
+        self.driver.find_element(*self.FINISH_BTN).click()
+        
+
+    def checkout_complete_comfirm(self):
+        return self.driver.find_element(*self.COMPLETE_HEADER).text
+        
