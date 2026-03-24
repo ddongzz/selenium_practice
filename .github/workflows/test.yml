@@ -37,12 +37,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name : Run Tests and Collect Allure Data
-      run : pytest --maxfail=1 --disable-warnings --alluredir=allure-results   
-    
     # 테스트 실행
-    - name : Run E2E Tests with Allure
-      # if : always()를 넣으면 앞의 테스트가 실패해도 리포트는 무조건 뽑힌다. 
+    - name : Run All API Tests
       run : pytest api/ -s --alluredir=allure-results
       continue-on-error : true
 
@@ -69,3 +65,10 @@ jobs:
       with:
         name : allure-results
         path : allure-results
+
+      
+
+    
+
+
+
