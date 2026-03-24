@@ -64,7 +64,7 @@ def pytest_runtest_makereport(item, call):
         if driver:
             # Allure 리포트에 스크린샷을 첨부하기 위해
             allure.attach(
-                driver.get_screenshoot_as_png(),
+                driver.get_screenshot_as_png(),
                 name = "에러 발생 이미지",
                 attachment_type=AttachmentType.PNG
             )
