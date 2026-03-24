@@ -26,7 +26,7 @@ def test_checkout(driver):
 
     complete_text = checkout_page.checkout_complete_comfirm()
     # 실패 이미지 저장을 위해 잠시 값 수정, 기존 값 : Thank you for your order!
-    assert complete_text == "Thank you for your order!", "주문이 완료되지 않았습니다."
+    assert complete_text == "Thank  for your order!", "주문이 완료되지 않았습니다."
 
 
 
