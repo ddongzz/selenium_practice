@@ -26,8 +26,8 @@ def test_checkout(driver):
 
     complete_text = checkout_page.checkout_complete_comfirm()
     assert complete_text == "Thank you for your order!", "주문이 완료되지 않았습니다."
-    # 에러를 확인하기 위해 내용을 다시 수정함
-    assert 1 == 2, "셀레니움 UI 테스트 폭파!"
+    # Attachments를 확인하기 위해 추가된 내용
+    # assert 1 == 2, "셀레니움 UI 테스트 폭파!"
 
 
     
