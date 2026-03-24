@@ -60,6 +60,7 @@ def pytest_runtest_makereport(item, call):
 
     # 테스트가 실패한 경우
     if rep.when == "call" and rep.failed:
+        driver = item.funcargs.get("driver")
         if driver:
             # Allure 리포트에 스크린샷을 첨부하기 위해
             allure.attach(
