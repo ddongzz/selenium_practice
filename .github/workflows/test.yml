@@ -39,7 +39,7 @@ jobs:
 
     # 테스트 실행
     - name : Run All API Tests
-      run : pytest api/ -s --alluredir=allure-results
+      run : pytest -s --alluredir=allure-results
       continue-on-error : true
 
     # Allure 결과물을 HTML 웹페이지 형태로 만들기
