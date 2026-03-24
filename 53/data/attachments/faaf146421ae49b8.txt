@@ -1,4 +1,0 @@
-
-[UI] 네거티브 테스트 타켓 : ID : '', PW : 'secret_sauce'
-[UI] 실제 발생한 에러 문구 : Epic sadface: Username is required
-예외처리 방어 로직 통과
