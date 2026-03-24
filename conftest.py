@@ -54,7 +54,7 @@ def db_connection():
     connection.close()
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makerreport(item, call):
+def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
 
