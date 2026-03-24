@@ -43,7 +43,7 @@ jobs:
     # 테스트 실행
     - name : Run E2E Tests with Allure
       # if : always()를 넣으면 앞의 테스트가 실패해도 리포트는 무조건 뽑힌다. 
-      run : pytest api/e2e_test.py -s --alluredir=allure-results
+      run : pytest api/ -s --alluredir=allure-results
       continue-on-error : true
 
     # Allure 결과물을 HTML 웹페이지 형태로 만들기
