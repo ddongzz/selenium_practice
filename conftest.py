@@ -1,9 +1,11 @@
 import pytest
 import pymysql
+import allure
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from allure_commons.types import AttachmentType
 
 # --------------------------------------------------------------------------
 # 웹 브라우저 장비
@@ -50,3 +52,18 @@ def db_connection():
     yield connection 
 
     connection.close()
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makerreport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+
+    # 테스트가 실패한 경우
+    if rep.when == "call" and rep.failed:
+        if driver:
+            # Allure 리포트에 스크린샷을 첨부하기 위해
+            allure.attach(
+                driver.get_screenshoot_as_png(),
+                name = "에러 발생 이미지",
+                attachment_type=AttachmentType.PNG
+            )
