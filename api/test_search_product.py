@@ -1,0 +1,42 @@
+import pytest
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
+
+# 1차 검증: 검색 결과로 화면에 노출된 상품들의 타이틀 텍스트를 모두 추출하여, 내가 검색한 키워드가 각 상품명에 제대로 포함되어 있는지 assert 구문으로 검증한다.
+
+# 필터 적용: 검색 결과가 나온 상태에서 화면 좌측의 카테고리 필터 중 하나(예: Hand Tools 체크박스)를 클릭하여 중복 조건을 건다.
+
+# 2차 검증: 다중 조건이 적용된 후 노출된 상품 리스트가 정상적으로 갱신되었는지 검증한다. (상품 개수의 변화 또는 필터된 상품의 카테고리 텍스트 확인 등 본인만의 기준으로 단언할 것)
+
+def test_search_product(driver):
+    wait = WebDriverWait(driver, 10)
+    driver.get("https://practicesoftwaretesting.com/")
+
+    print("검색란을 선택 후 텍스트 입력")
+    search_input = wait.until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, "#search-query"))
+        )
+    search_input.send_keys("Pliers")
+    print("검색란을 선택 후 텍스트 입력 완료")
+
+    # 현재 해당 부분 클릭이 되지 않음 elementnotinteractableexception 발생
+    # search_btn = driver.find_element(By.CLASS_NAME, "btn-secondary")
+    # search_btn.click()
+
+    # 검색한 상품의 텍스트를 조회
+    print("검색한 상품의 텍스트 조회")
+    search_product = wait.until(
+        EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".card .card-title"))
+    )
+    for p in search_product:
+        title = p.get_attribute("textContent").strip()
+
+        if title:
+            print(f'상품명: {title}')
+        else:
+            print('상품이 담기지 않았다')
+    print("검색한 텍스트가 모두 조회되었습니다.")
+

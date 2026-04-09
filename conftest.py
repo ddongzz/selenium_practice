@@ -21,6 +21,8 @@ def driver():
     options.add_argument("--disable-dev-shm-usage")
     # 비밀번호 경고창 안뜨게 하기 위해
     options.add_argument("--incognito")
+    # 창의 사이즈를 고정해서 미출력되거나 클릭되지 않는 상태를 제거하기 위해
+    options.add_argument('--window-size=1920,1080')
 
     driver = webdriver.Chrome(service=service, options=options)
     driver.implicitly_wait(5)
