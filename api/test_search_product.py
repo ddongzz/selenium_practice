@@ -49,8 +49,10 @@ def test_search_product(driver):
     driver.execute_script("arguments[0].click();", hand_tool_check_box)
     time.sleep(2)
 
-    # 여기서 타임아웃 에러가 발생한다.
-    # no_product_text = wait.until(
-    #     EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-test='no-results']"))
-    #     ).text
-    # print(no_product_text)
+    no_product_text = wait.until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-test='no-results']"))
+        ).text
+    print(no_product_text)
+
+    # 이전 스크립트 작성할때와 스크립트 수정 시기의 결과가 달라졌다
+    # 해당 사이트는 QA 스크립트 작성 연습을 위해 만들어진 사이트이기 때문에 다른 테스트를 진행한다.
