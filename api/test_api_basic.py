@@ -1,14 +1,14 @@
 import requests
 import pytest
 
-def test_get_user_list():
+def test_get_user_list(api_context):
     print("API 요청 테스트 시작")
 
-    url = "https://reqres.in/api/users?page=2"
-    headers = {
-        "x-api-key": "pub_46acecc3066bc0da2b0f3f19aa63d77ad99e1bfb052def73453ce1af06382153"
-    }
-    response = requests.get(url, headers=headers)
+    # conftest.py에서 배달받은 url에 쿼리 파라미터만 추가
+    request_url = f"{api_context['url']}?page=2"
+    
+    # 배달받은 headers 적용
+    response = requests.get(request_url, headers=api_context["headers"])
 
     print("상태코드 200 확인")
 

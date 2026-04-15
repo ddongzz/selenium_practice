@@ -40,6 +40,8 @@ jobs:
     # 테스트 실행
     - name : Run All API Tests
       run : pytest -s --alluredir=allure-results
+      env :
+        REQRES_API_KEY : ${{ secrets.REQRES_API_KEY }}
       continue-on-error : true
 
     # Allure 결과물을 HTML 웹페이지 형태로 만들기

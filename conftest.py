@@ -1,6 +1,8 @@
+import os
 import pytest
 import pymysql
 import allure
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -54,6 +56,24 @@ def db_connection():
     yield connection 
 
     connection.close()
+
+# --------------------------------------------------------------------------
+# API 테스트 장비 
+# --------------------------------------------------------------------------
+
+@pytest.fixture
+def api_context():
+    base_url = "https://reqres.in/api/users"
+
+    # .env 파일에 있는 API 키를 불러옴
+    headers = {
+        "x-api-key": os.getenv("REQRES_API_KEY")
+    }
+    return {"url": base_url, "headers": headers}
+
+# --------------------------------------------------------------------------
+# Allure 리포트 훅
+# --------------------------------------------------------------------------
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):

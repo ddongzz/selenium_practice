@@ -1,21 +1,20 @@
 import requests
 import pytest
 
-def test_create_new_user():
+def test_create_new_user(api_context):
     print("API POST 테스트 시작")
-
-    url = "https://reqres.in/api/users"
 
     payload = {
         "name": "Dongchan Lee",
         "job": "QA Engineer"
     }
 
-    headers = {
-        "x-api-key": "pub_46acecc3066bc0da2b0f3f19aa63d77ad99e1bfb052def73453ce1af06382153"
-    }
-
-    response = requests.post(url, json=payload, headers=headers)
+    response = requests.post(
+        api_context["url"],
+        json=payload,
+        headers=api_context["headers"]
+    )
+        
 
     assert response.status_code == 201, f"데이터 생성 실패 : {response.status_code}"
     print("데이터 생성 201 성공")
