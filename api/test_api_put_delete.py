@@ -1,7 +1,8 @@
 import requests
 import pytest
 
-def test_update_user(api_context):
+# 업데이트를 먼저하기 위해 함수명 변경
+def test_1_update_user(api_context):
     print("API PUT 테스트 시작")
 
     request_url = f"{api_context['url']}"
@@ -24,7 +25,7 @@ def test_update_user(api_context):
     assert data["job"] == "Senior QA Engineer", "직업이 변경되지 않았습니다."
     print(f"데이터 수정 확인 : {data['job']} 업데이트 시간 : {data['updatedAt']}")
 
-def test_delete_user(api_context):
+def test_2_delete_user(api_context):
     print("데이터 삭제 시작")
 
     request_url = f"{api_context['url']}/2"
