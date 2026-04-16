@@ -67,6 +67,18 @@ jobs:
       with:
         name : allure-results
         path : allure-results
+    
+    # 슬랙으로 테스트 결과 알림 보내기
+    - name : Send Slack Notification
+      uses : rtCamp/action-slack-notify@v2
+      env :
+        SLACK_WEBHOOK : ${{ secrets.SLACK_WEBHOOK_URL}}
+        SLACK_TITLE : "API 자동화 테스트 결과"
+        SLACK_MESSAGE : "테스트 실행이 완료되었습니다 Github Actions 탭을 확인해주세요"
+        # 성공은 초록색 , 실패는 빨간생
+        SLACK_COLOR : ${{ job.status == 'success' && 'good' || 'danger'}}
+        SLACK_USERNAME : "동동즈의 QA 봇"
+      if: always()
 
       
 
