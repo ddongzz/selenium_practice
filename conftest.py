@@ -54,8 +54,17 @@ def db_connection():
         connection.commit()
 
     yield connection 
-
-    connection.close()
+    # 테스트 종료 후 뒤처리 (성공/실패 상관없이 무조건 실행됨)
+    try:
+        with connection.cursor() as cursor:
+            # test_integration.py에서 만든 실무용 테이블 비우기
+            cursor.execute("TRUNCATE TABLE real_users")
+            connection.commit()
+            print("\n [클린업] 테스트 종료 : real_users 테이블 데이터를 완벽하게 초기화했습니다.")
+    finally:
+        connection.close()
+        print("DB 연결을 안전하게 종료했습니다.")
+    
 
 # --------------------------------------------------------------------------
 # API 테스트 장비 
