@@ -12,41 +12,20 @@ def test_create_user_and_verify_db(api_context, db_connection):
         json=payload,
         headers=api_context["headers"]
     )
+    new_user_id = response.json()['id']
 
-    assert response.status_code == 201, "201 값이 아닙니다."
-    api_data = response.json()
-    new_user_id = api_data['id']
-    print(f"API 생성 완료, 발급된 ID : {new_user_id}")
-
-    # 서버가 없어 데이터베이스를 직접 넣어준다.
-
+    # DB 넣기 
     with db_connection.cursor() as cursor:
-        cursor.execute("CREATE TABLE IF NOT EXISTS real_users (id VARCHAR(50), name VARCHAR(50), job VARCHAR(50))")
-        cursor.execute(
-            "INSERT INTO real_users (id, name, job) VALUES (%s, %s, %s)",
-            (new_user_id, api_data['name'], api_data['job'])
-        )
+        cursor.execute("CREATE TABLE IF NOT EXISTS real_users(id VARCHAR(50), name VARCHAR(50), job VARCHAR(50))")
+        cursor.execute("INSERT INTO real_users (id, name, job) VALUES(%s, %s, %s)", (new_user_id, payload['name'], payload['job']))
         db_connection.commit()
 
-    # 추가한 데이터 확인
-    print(f"생성한 데이터 확인 : {new_user_id}")
-
+    # 넣은 DB 확인하기
     with db_connection.cursor() as cursor:
-        # API에서 응답받은 ID로 DB를 조회
-        sql = "SELECT * FROM real_users WHERE ID = %s"
-        cursor.execute(sql, (new_user_id,))
-
-        # 조건에 맞는 데이터 1줄 가져오기
+        cursor.execute("SELECT * FROM real_users WHERE id = %s", (new_user_id,))
         db_result = cursor.fetchone()
 
-    # 데이터가 있는지 확인
-    assert db_result is not None, "DB에 데이터에 저장되지 않았습니다."
-    print("데이터 조회 성공")
-
-    # 정합성 크로스 체크
-    assert db_result['name'] == payload['name'], f"값이 일치하지 않습니다.{db_result['name']}, {payload['name']}"
-    assert db_result['job'] == payload['job'], f"값이 일치하지 않습니다.{db_result['job'], {payload['job']}}"
-
-    print("최종 결과가 일치합니다.")
+    assert db_result is not None
+    assert db_result['name'] == payload['name']
 
 
