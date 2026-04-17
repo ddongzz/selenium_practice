@@ -2,6 +2,8 @@ import os
 import pytest
 import pymysql
 import allure
+import uuid
+import requests
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -99,3 +101,24 @@ def pytest_runtest_makereport(item, call):
                 name = "에러 발생 이미지",
                 attachment_type=AttachmentType.PNG
             )
+
+# --------------------------------------------------------------------------
+# 병렬 테스트용 임시 유저 발급 장비 (Data Isolation)
+# --------------------------------------------------------------------------
+
+@pytest.fixture
+def temp_user(api_context):
+    unique_name = f"QA_User_{uuid.uuid4().hex[:6]}"
+    payload = {"name": unique_name, "job": "Tester"}
+
+    response = requests.post(api_context["url"], json=payload, headers=api_context["headers"])
+    new_user_id = response.json()['id']
+    print(f"\n 워커 전용 임시 유저 생성, ID: {new_user_id}")
+
+    # 테스트 함수로 새로 만든 유저의 ID를 넘겨준다.
+    yield new_user_id
+
+    # 테스트가 끝나면 사용한 유저만 타겟팅해서 지운다.
+    delete_url = f"{api_context['url']}/{new_user_id}"
+    requests.delete(delete_url, headers=api_context["headers"])
+    print(f"임시 유저 삭제 완료, ID : {new_user_id}")
