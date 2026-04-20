@@ -1,56 +1,21 @@
 import pytest
+from pages.practice_shop.home_page import PracticeHomePage
 import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-pytestmark = pytest.mark.ui
+pytestmark = pytest.mark.usefixtures # UI 마커 유지
 
 def test_search_product(driver):
-    wait = WebDriverWait(driver, 10)
-    driver.get("https://practicesoftwaretesting.com/")
+    print("POM 리팩토링 버전 상품 검색 테스트 시작")
 
-    print("검색란을 선택 후 텍스트 입력")
-    search_input = wait.until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "[data-test='search-query']"))
-        )
-    search_input.send_keys("Pliers")
-    print("검색란을 선택 후 텍스트 입력 완료")
+    home_page = PracticeHomePage(driver)
 
-    
-    search_btn = wait.until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "[data-test='search-submit']"))
-        )
-    search_btn.click()
+    home_page.load()
+
+    search_keyword = "pliers"
+    home_page.search_for_item(search_keyword)
 
     time.sleep(2)
-    # 검색한 상품의 텍스트를 조회
-    print("검색한 상품의 텍스트 조회")
-    search_product = wait.until(
-        EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".card .card-title"))
-    )
-    
-    for p in search_product:
-        title = p.get_attribute("textContent").strip()
-        # assert 문을 틀리지 않으나, 해당 페이지에서 담긴 상품외 던져주는 데이터로 인해 에러가 발생함
-        # assert "Pliers" in title, "상품이 담기지 않았습니다."
-        if title:
-            print(f'상품명: {title}')
-        else:
-            print('상품이 담기지 않았다')
-    print("검색한 텍스트가 모두 조회되었습니다.")
 
-    hand_tool_check_box = wait.until(
-        EC.element_to_be_clickable((By.XPATH, "//label[contains(., 'Hand Tools')]"))
-    )
-    driver.execute_script("arguments[0].click();", hand_tool_check_box)
-    time.sleep(2)
-
-    # 해당 사이트의 페이지가 오락가락함 그래서 상품이 출력되었을 수 있음 추후 확인 후 if문을 통해 코드 수정 검토 예정
-    # no_product_text = wait.until(
-    #     EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-test='no-results']"))
-    #     ).text
-    # print(no_product_text)
-
-    # 이전 스크립트 작성할때와 스크립트 수정 시기의 결과가 달라졌다
-    # 해당 사이트는 QA 스크립트 작성 연습을 위해 만들어진 사이트이기 때문에 다른 테스트를 진행한다.
+    product_list = home_page.driver.find_elements(*home_page.PRODUCT_LIST)
+    assert len(product_list) > 0, f"'{search_keyword}' 검색 결과가 없습니다."
+    print(f"'{search_keyword}' 검색 성공 > 발견된 상품 수 : {len(product_list)}")
