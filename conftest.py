@@ -20,13 +20,16 @@ def driver():
     service = Service(ChromeDriverManager().install())
     options = Options()
     options.add_argument("--headless") # GUI가 없는 GitHub Actions 때문에
-    # options.add_argument("--disable-gpu") # GPU 가속 끄기
+    options.add_argument("--disable-gpu") # GPU 가속 끄기
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     # 비밀번호 경고창 안뜨게 하기 위해
     options.add_argument("--incognito")
     # 창의 사이즈를 고정해서 미출력되거나 클릭되지 않는 상태를 제거하기 위해
     options.add_argument('--window-size=1920,1080')
+    options.add_argument("--disable-extensions") # 불필요한 확장 프로그램 차단
+    options.add_argument("--blick-settins=imagesEnable=false") # 웹페이지 로딩 차단(중요)
+    options.page_load_strategy = 'eager' # 뼈대(DOM)만 그려지면 바로 테스트 시작하다록 하는것 (자잘한 스크립트 대기 X)
 
     driver = webdriver.Chrome(service=service, options=options)
     driver.implicitly_wait(5)
