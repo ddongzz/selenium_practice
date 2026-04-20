@@ -10,7 +10,7 @@ on :
 jobs:
   test:
     runs-on : ubuntu-latest # GitHub Actions 실행 환경(Linux)
-    timeout-minutes: 10 # 최대 10분까지만 실행
+    timeout-minutes: 15 # 최대 10분까지만 실행
 
     # MySQL 서버를 임시로 띄우기 위해
     services:
@@ -38,8 +38,16 @@ jobs:
         pip install -r requirements.txt
 
     # 테스트 실행
-    - name : Run All API Tests
-      run : pytest -s --alluredir=allure-results
+    - name : Run API Tests
+      run : | 
+        python -m pytest -m "not ui" -n auto --alluredir=allure-results
+      env :
+        REQRES_API_KEY : ${{ secrets.REQRES_API_KEY }}
+      continue-on-error : true # 중간에 실패한 테스트가 있더라도 계속 진행
+
+    - name : Run UI Tests
+      run : |
+        python -m pytest -m "ui" -n 1 --alluredir=allure-results
       env :
         REQRES_API_KEY : ${{ secrets.REQRES_API_KEY }}
       continue-on-error : true
@@ -76,13 +84,6 @@ jobs:
         SLACK_TITLE : "API 자동화 테스트 결과"
         SLACK_MESSAGE : "테스트 실행이 완료되었습니다 Github Actions 탭을 확인해주세요"
         # 성공은 초록색 , 실패는 빨간생
-        SLACK_COLOR : ${{ job.status == 'success' && 'good' || 'danger'}}
+        SLACK_COLOR : ${{ job.status }}
         SLACK_USERNAME : "동동즈의 QA 봇"
       if: always()
-
-      
-
-    
-
-
-

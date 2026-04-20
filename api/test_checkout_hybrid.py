@@ -2,6 +2,8 @@ import pytest
 import requests
 import time
 
+pytestmark = pytest.mark.ui
+
 def test_fast_checkout_with_api_login(driver):
     # ---------------------------------------------------------
     # 1️⃣ [API 단계] 백그라운드에서 로그인 API 찌르기
