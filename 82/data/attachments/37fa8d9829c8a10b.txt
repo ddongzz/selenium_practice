@@ -1,0 +1,4 @@
+
+[UI] 네거티브 테스트 타켓 : ID : 'locked_out_user', PW : 'secret_sauce'
+[UI] 실제 발생한 에러 문구 : Epic sadface: Sorry, this user has been locked out.
+예외처리 방어 로직 통과
