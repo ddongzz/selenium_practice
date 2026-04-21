@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 class BasePage:
     def __init__(self, driver):
@@ -22,3 +23,8 @@ class BasePage:
     
     def get_title(self):
         return self.driver.title
+    
+    NAV_CART_BTN = (By.CSS_SELECTOR, "[data-test='nav-cart']")
+
+    def go_to_cart(self):
+        self.click(self.NAV_CART_BTN)
