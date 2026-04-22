@@ -1,4 +1,0 @@
-API POST 테스트 시작
-데이터 생성 201 성공
-서버 응답 데이터: {'name': 'Dongchan Lee', 'job': 'QA Engineer', 'id': '302', 'createdAt': '2026-04-21T14:53:57.595Z', '_meta': {'powered_by': 'ReqRes', 'docs_url': 'https://app.reqres.in/documentation', 'upgrade_url': 'https://app.reqres.in/upgrade', 'example_url': 'https://app.reqres.in/examples/notes-app', 'variant': 'v1_b', 'message': 'This is a read-only demo endpoint. Sign up to create your own collections with full CRUD and auth.', 'cta': {'label': 'Get started', 'url': 'https://app.reqres.in/upgrade'}, 'context': 'legacy_success'}}
-서버가 부여한 ID : 302
